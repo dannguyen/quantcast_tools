@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # QuantcastReader
 
 TODO: Write a gem description
@@ -27,3 +28,9 @@ TODO: Write usage instructions here
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+=======
+quantcast_tools
+===============
+
+A library to handle Quantcast data
+>>>>>>> 31e42ae676e65e2d2e5a3f48b44e393a6dc7fd11
