@@ -60,9 +60,9 @@ module QuantcastTools
       # >>>>>> Metrics
       # These methods use the :parsed_qc_html to get the appropriate value
 
-      # TODO 
+      # TODO
       def rank_us 
-
+         parsed_qc_html.css("li.rank span").text.gsub(',', '').to_i
       end
 
       # TODO
