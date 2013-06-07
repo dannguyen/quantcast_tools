@@ -47,6 +47,7 @@ module QuantcastTools
       end
 
       def enough_info?
+         true unless parsed_qc_html.css("div.summary p").text.include? "We do not have enough information to provide a traffic estimate"
       end
 
       def networked?
