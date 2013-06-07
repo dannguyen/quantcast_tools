@@ -45,9 +45,14 @@ module QuantcastTools
 
       def quantified?
          if parsed_qc_html.css("li.badge.quantified h4").text == "Quantified"
-            true
+            if parsed_qc_html.css("li.badge.quantified p.caption").text == "Rough Estimate"
+               false
+               # parsed_qc_html.css("li.badge.quantified p.caption").text
+            else
+               true
+            end
          elsif parsed_qc_html.css("li.badge.unquantified h4").text == "Not Quantified"
-            false 
+            false
          end
       end
 
@@ -76,7 +81,9 @@ module QuantcastTools
       # TODO
       def rank_us
          if enough_info?
-            parsed_qc_html.css("li.rank span").text.gsub(',', '').to_i
+            unless parsed_qc_html.css("li.rank span").text.empty?
+               parsed_qc_html.css("li.rank span").text.gsub(',', '').to_i
+            end
          end
       end
 
