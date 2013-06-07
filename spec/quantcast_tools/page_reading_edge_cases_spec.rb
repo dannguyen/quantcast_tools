@@ -3,7 +3,7 @@ include QuantcastTools
 
 describe QuantcastTools::PageReader do 
 
-   context "edge cases involving pages that don't exist or are hidden", :skip => true do 
+   context "edge cases involving pages that don't exist or are hidden", :skip => false do 
 
       # Quantcast will seem to have info for non-existent pages
       context "nonexistent example that is not-networked" do

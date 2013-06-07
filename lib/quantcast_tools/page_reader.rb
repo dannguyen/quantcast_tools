@@ -44,9 +44,15 @@ module QuantcastTools
       end
 
       def quantified?
+         if parsed_qc_html.css("li.badge.quantified h4").text == "Quantified"
+            true
+         elsif parsed_qc_html.css("li.badge.unquantified h4").text == "Not Quantified"
+            false 
+         end
       end
 
       def enough_info?
+         true unless parsed_qc_html.css("div.summary p").text.include? "We do not have enough information to provide a traffic estimate"
       end
 
       def networked?
@@ -56,6 +62,9 @@ module QuantcastTools
 
       # parsed from page
       def network_name
+         if parsed_qc_html.css("tbody#wunit-hierarchy-table tr:not(.current) a").first
+            parsed_qc_html.css("tbody#wunit-hierarchy-table tr:not(.current) a").first.text.strip
+         end
       end
 
 
@@ -65,8 +74,10 @@ module QuantcastTools
       # These methods use the :parsed_qc_html to get the appropriate value
 
       # TODO
-      def rank_us 
-         parsed_qc_html.css("li.rank span").text.gsub(',', '').to_i
+      def rank_us
+         if enough_info?
+            parsed_qc_html.css("li.rank span").text.gsub(',', '').to_i
+         end
       end
 
       # The text bit looks like this:
@@ -76,21 +87,22 @@ module QuantcastTools
       def monthly_unique_visitors_us
 
          m_val = parsed_qc_html.css(".current").select{|c| c['profile-data'] == "-1"}[0].text.strip
+         unless m_val.include? "N/A"
+            #parse with regex, e.g. "3.2", "M"
+            m_number, m_abbrev =  m_val.match(/(\d+\.\d+)([\w]?)/)[1..2]
+            multiplier = case m_abbrev
+            when 'K'
+               1000
+            when 'M'
+               1000000
+            when 'B'
+               1000000000
+            else
+               1
+            end
 
-         #parse with regex, e.g. "3.2", "M"
-         m_number, m_abbrev =  m_val.match(/(\d+\.\d+)([\w]?)/)[1..2]
-         multiplier = case m_abbrev
-         when 'K'
-            1000
-         when 'M'
-            1000000
-         when 'B'
-            1000000000
-         else
-            1
+            return (m_number.to_f * multiplier).to_i
          end
-
-         return (m_number.to_f * multiplier).to_i
       end
 
 
