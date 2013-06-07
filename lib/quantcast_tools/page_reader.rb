@@ -44,6 +44,11 @@ module QuantcastTools
       end
 
       def quantified?
+         if parsed_qc_html.css("li.badge.quantified h4").text == "Quantified"
+            true
+         elsif parsed_qc_html.css("li.badge.unquantified h4").text == "Not Quantified"
+            false 
+         end
       end
 
       def enough_info?
