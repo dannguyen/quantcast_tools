@@ -62,6 +62,9 @@ module QuantcastTools
 
       # parsed from page
       def network_name
+         if parsed_qc_html.css("tbody#wunit-hierarchy-table tr:not(.current) a").first
+            parsed_qc_html.css("tbody#wunit-hierarchy-table tr:not(.current) a").first.text.strip
+         end
       end
 
 
