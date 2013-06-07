@@ -1,7 +1,5 @@
 require 'quantcast_tools'
 
-
-
 # set up fixtures
 require_relative "fixtures/spec_fixtures"
 require "fakeweb"
@@ -17,10 +15,12 @@ end
 
 
 RSpec.configure do |config|
+
+  config.filter_run_excluding :skip => true
+
   config.before(:each) do
-#
   end
+  
   config.after(:each) do
-#
   end
 end

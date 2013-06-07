@@ -5,11 +5,15 @@ module QuantcastTools
    class PageReader
       BASE_QUANTCAST_SERVICE_URL = "https://www.quantcast.com"
 
-      attr_reader :url, :qc_url, :qc_html, :fetched_at_timestamp, :errors
+      attr_reader :url, :qc_url, :qc_html, :qc_canonical_url,
+         :fetched_at_timestamp, :errors
 
       def initialize(the_url, opts={})
          @url = the_url 
          @qc_url = make_qc_url( @url )     
+         # this URL seems to be used by quantcast in their internal system, independent of the 
+         # URL passed into the parameter
+         @qc_canonical_url = make_qc_canonical_url(@url)
       end
 
 
@@ -65,9 +69,28 @@ module QuantcastTools
          parsed_qc_html.css("li.rank span").text.gsub(',', '').to_i
       end
 
-      # TODO
+      # The text bit looks like this:
+      # Monthly Uniques    67.4M US    291.1M Global
+      #
+      # returns: Integer, where M and K are translated to 1000000 and 1000, respectively
       def monthly_unique_visitors_us
 
+         m_val = parsed_qc_html.css(".current").select{|c| c['profile-data'] == "-1"}[0].text.strip
+
+         #parse with regex, e.g. "3.2", "M"
+         m_number, m_abbrev =  m_val.match(/(\d+\.\d+)([\w]?)/)[1..2]
+         multiplier = case m_abbrev
+         when 'K'
+            1000
+         when 'M'
+            1000000
+         when 'B'
+            1000000000
+         else
+            1
+         end
+
+         return (m_number.to_f * multiplier).to_i
       end
 
 
@@ -114,11 +137,19 @@ module QuantcastTools
          open(url){|f| f.read }
       end
 
+      # takes in: "http://www.example.com"
+      # returns: "https://www.quantcast.com/www.example.com"
       def make_qc_url(url)
          target_path = URI.parse(url).to_s.split("//")[1]
          return URI.join( BASE_QUANTCAST_SERVICE_URL, target_path).to_s
       end
 
+      # takes in: "http://www.example.com"
+      # returns: com.example
+      def make_qc_canonical_url(url)
+         target_path = URI.parse(url).to_s.split("//")[1]
+         target_path.split('.').reverse.join('.').chomp('.www')
+      end
 
       # Parses the raw HTML in @qc_html as a Nokogiri object and memoizes the result
       # returns: Nokogiri::HTML
