@@ -95,8 +95,6 @@ module QuantcastTools
 
 
 
-
-
       # >>>>> updated_at timestamps
 
       # matches MMM DD, YYYY
