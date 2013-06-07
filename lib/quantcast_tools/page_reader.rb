@@ -16,7 +16,6 @@ module QuantcastTools
          @qc_canonical_url = make_qc_canonical_url(@url)
       end
 
-
       # expects: @qc_url to be set 
       # modifies: @fetched_at_timestamp, @qc_html
       def fetch_from_qc!      
@@ -44,7 +43,11 @@ module QuantcastTools
          if parsed_qc_html.css("div.messaging.clearfix")
             if parsed_qc_html.css("div.messaging.clearfix").text.include? "data has been hidden by the owner."
                true
+            else
+               false
             end
+         else
+            false
          end
       end
 
@@ -148,6 +151,15 @@ module QuantcastTools
       # returns String, eg. "2013-02"
       def next_update_timestamp_str
          Time.parse(next_update_timestamp_words).strftime("%Y-%m-%d") unless next_update_timestamp_words.nil?
+      end
+
+      def to_hash
+         hash = {}
+         methods = ["hidden?", "quantified?", "enough_info?", "networked?", "network_name"]
+         methods.each do |method|
+            hash[method.to_sym] = self.send(method)
+         end
+         hash
       end
 
 
