@@ -192,7 +192,7 @@ describe QuantcastTools::PageReader do
      ##########################
      # A domain that is quantified, has plenty of info, and is networked
 
-      context "Wordpress is quantified with plenty of info and is networked", :skip => true do
+      context "Wordpress is quantified with plenty of info and is networked", :skip => false do
          before(:each) do 
             @q_reader = PageReader.new("http://wordpress.com")
             @q_reader.fetch_from_qc!
