@@ -41,6 +41,11 @@ module QuantcastTools
 
 
       def hidden?
+         if parsed_qc_html.css("div.messaging.clearfix")
+            if parsed_qc_html.css("div.messaging.clearfix").text.include? "data has been hidden by the owner."
+               true
+            end
+         end
       end
 
       def quantified?

@@ -67,7 +67,7 @@ describe QuantcastTools::PageReader do
 
 
 
-      context "quantified example with hidden by owner request", :skip => true do 
+      context "quantified example with hidden by owner request", :skip => false do 
          before(:each) do 
             @q_reader = PageReader.new "http://bubblews.com"
             @q_reader.fetch_from_qc!
