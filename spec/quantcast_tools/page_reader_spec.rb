@@ -108,10 +108,6 @@ describe QuantcastTools::PageReader do
             expect( @q_reader.monthly_unique_visitors_us ).to eq 30300
          end
 
-         it "should generate a hash correctly" do 
-           # @q_reader = PageReader.new("http://www.example.com")
-            expect( @q_reader.to_hash ).to eq( { :hidden? => false, :quantified? => false, :enough_info? => true, :networked? => false, :network_name => nil })
-         end
    
          context "updated_timestamp" do 
             it "should get :updated_timestamp_words" do 

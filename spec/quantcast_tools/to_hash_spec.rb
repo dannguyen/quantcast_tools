@@ -25,6 +25,7 @@ describe QuantcastTools::Ranker do
          msh = QuantcastTools::Ranker("http://www.example.com")
          expect(msh.monthly_unique_visitors_us).to eq 30300
          expect(msh.rank_us ).to eq 43992
+         expect(msh.qc_url ).to eq 'https://www.quantcast.com/www.example.com'
       end
    end
 end

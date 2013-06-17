@@ -8,6 +8,7 @@ module QuantcastTools
       attr_reader :url, :qc_url, :qc_html, :qc_canonical_url,
          :fetched_at_timestamp, :errors
 
+      #TODO: Decouple fetching from page parsing
       def initialize(the_url, opts={})
          @url = the_url 
          @qc_url = make_qc_url( @url )     
@@ -23,6 +24,16 @@ module QuantcastTools
          @qc_html = fetch_page(@qc_url)
          @errors = nil 
       end
+
+      def to_hash
+         hash = Hashie::Mash.new
+         methods = ["qc_url", "hidden?", "quantified?", "enough_info?", "networked?", "network_name", "updated_timestamp_str", "next_update_timestamp_str", "monthly_unique_visitors_us", "rank_us"]
+         methods.each do |method|
+            hash[method.to_sym] = self.send(method)
+         end
+         hash
+      end
+
 
 
       def fetched?
@@ -79,8 +90,6 @@ module QuantcastTools
             parsed_qc_html.css("tbody#wunit-hierarchy-table tr:not(.current) a").first.text.strip
          end
       end
-
-
 
 
       # >>>>>> Metrics
@@ -150,14 +159,6 @@ module QuantcastTools
          Time.parse(next_update_timestamp_words).strftime("%Y-%m-%d") unless next_update_timestamp_words.nil?
       end
 
-      def to_hash
-         hash = Hashie::Mash.new
-         methods = ["hidden?", "quantified?", "enough_info?", "networked?", "network_name", "updated_timestamp_str", "next_update_timestamp_str", "monthly_unique_visitors_us", "rank_us"]
-         methods.each do |method|
-            hash[method.to_sym] = self.send(method)
-         end
-         hash
-      end
 
 
       # >>>>>>>>>>>>> Private
