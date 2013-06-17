@@ -7,6 +7,7 @@ describe QuantcastTools::PageReader do
       expect(true).to eq true
    end
 
+
    context "initialization" do 
       it "should initialize with a page url as first parameter" do 
          @q_reader = PageReader.new("http://www.example.com")

@@ -86,7 +86,6 @@ module QuantcastTools
       # >>>>>> Metrics
       # These methods use the :parsed_qc_html to get the appropriate value
 
-      # TODO
       def rank_us
          if enough_info?
             unless parsed_qc_html.css("li.rank span").text.empty?
@@ -152,8 +151,8 @@ module QuantcastTools
       end
 
       def to_hash
-         hash = {}
-         methods = ["hidden?", "quantified?", "enough_info?", "networked?", "network_name"]
+         hash = Hashie::Mash.new
+         methods = ["hidden?", "quantified?", "enough_info?", "networked?", "network_name", "updated_timestamp_str", "next_update_timestamp_str", "monthly_unique_visitors_us", "rank_us"]
          methods.each do |method|
             hash[method.to_sym] = self.send(method)
          end
