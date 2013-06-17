@@ -37,7 +37,7 @@ describe QuantcastTools::PageReader do
 
 
       # Quantcast will seem to have info for non-existent subdomains
-      context "unquantified example and non-existent", :skip => true do
+      context "unquantified example and non-existent", :skip => false do
          before(:each) do 
             @q_reader = PageReader.new "http://notarealsitebuthasanetwork.tumblr.com"
             @q_reader.fetch_from_qc!
@@ -67,7 +67,7 @@ describe QuantcastTools::PageReader do
 
 
 
-      context "quantified example with hidden by owner request", :skip => true do 
+      context "quantified example with hidden by owner request", :skip => false do 
          before(:each) do 
             @q_reader = PageReader.new "http://bubblews.com"
             @q_reader.fetch_from_qc!
