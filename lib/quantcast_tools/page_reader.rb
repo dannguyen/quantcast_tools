@@ -96,10 +96,8 @@ module QuantcastTools
       # These methods use the :parsed_qc_html to get the appropriate value
 
       def rank_us
-         if enough_info?
-            unless parsed_qc_html.css("li.rank span").text.empty?
-               parsed_qc_html.css("li.rank span").text.gsub(',', '').to_i
-            end
+         unless parsed_qc_html.css("li.rank span").text.empty?
+            parsed_qc_html.css("li.rank span").text.gsub(',', '').to_i
          end
       end
 
@@ -112,19 +110,23 @@ module QuantcastTools
          m_val = parsed_qc_html.css(".current").select{|c| c['profile-data'] == "-1"}[0].text.strip
          unless m_val.include? "N/A"
             #parse with regex, e.g. "3.2", "M"
-            m_number, m_abbrev =  m_val.match(/(\d+\.\d+)([\w]?)/)[1..2]
-            multiplier = case m_abbrev
-            when 'K'
-               1000
-            when 'M'
-               1000000
-            when 'B'
-               1000000000
-            else
-               1
+
+            if m_matches = m_val.match(/(\d+\.?\d*)([\w]?)/)
+               m_number, m_abbrev =  m_matches[1..2]
+               multiplier = case m_abbrev
+               when 'K'
+                  1000
+               when 'M'
+                  1000000
+               when 'B'
+                  1000000000
+               else
+                  1
+               end
+               return (m_number.to_f * multiplier).to_i
             end
 
-            return (m_number.to_f * multiplier).to_i
+            
          end
       end
 
